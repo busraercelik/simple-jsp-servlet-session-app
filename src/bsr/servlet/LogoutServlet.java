@@ -11,31 +11,25 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//If create is false and the request has no valid HttpSession, this method returns null.
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// If create is false and the request has no valid HttpSession, this method
+		// returns null.
 		HttpSession session = request.getSession(false);
-		if(session!=null) {
+		if (session != null) {
 			session.invalidate();
-			
+
 			response.sendRedirect("login.jsp");
 			return;
-			
-			//response already committed error example
+
+			// response already committed error example
 			/*
-			//response is committed
-			boolean dateExpired=true;
-			if(dateExpired) {
-				response.sendRedirect("login.jsp");
-				//end the control here
-				//return;
-			}
-			boolean isTokenBad=true;
-			if(isTokenBad) {
-				response.sendRedirect("login.jsp");
-				//return;
-			}
-			*/
+			 * //response is committed boolean dateExpired=true; if(dateExpired) {
+			 * response.sendRedirect("login.jsp"); //end the control here //return; }
+			 * boolean isTokenBad=true; if(isTokenBad) { response.sendRedirect("login.jsp");
+			 * //return; }
+			 */
 		}
 	}
 

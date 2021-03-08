@@ -1,34 +1,39 @@
-package bsr.service;
+ package bsr.service;
 
 import java.util.HashMap;
 
 import bsr.model.User;
+import bsr.repo.UserRepo;
+import bsr.repo.impl.UserRepoImpl;
 
 public class LoginService {
 	
-	HashMap<String, String> users = new HashMap<>();
+	UserRepo userRepo=null;
 	
 	public LoginService() {
-		users.put("bercelik", "123");
-		users.put("smandal", "123");
-		users.put("emusk", "123");
+		userRepo= new UserRepoImpl();
 	}
 	
-	public boolean authenticate (String username, String password) {
-		if (password == null || password.trim()=="") {
+	public boolean authenticate (String enteredUsername, String enteredPassword) {
+		User user = null;
+		
+		if (enteredPassword == null || enteredPassword.trim().equals("")) {
 			return false;
 		}
-		String enteredPass = users.get(username);
-	    if (!enteredPass.equals(password)) {
+		user = userRepo.getUserByUsername(enteredUsername);
+		if (user == null) {
 			return false;
 		}
+		String passwordFromDb = user.getPassword();
+	    if (!enteredPassword.equals(passwordFromDb)) {
+			return false;
+		} 
 		return true;
 	}
-	
-	public User getUserDetails (String username) {
-		User user = new User();
-		user.setUsername(username);
-		
-		return user;
+
+	public User getUserDetails(String enteredUsername) {
+		return userRepo.getUserByUsername(enteredUsername);
 	}
+	
+	
 }

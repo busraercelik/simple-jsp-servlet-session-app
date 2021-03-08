@@ -18,24 +18,29 @@ import bsr.service.LoginService;
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		HttpSession session = null;
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-		HttpSession session=null;
+		
 		PrintWriter out = response.getWriter();
 		response.setContentType("text/html");
 		LoginService loginService = new LoginService();
 		boolean isAuthenticated = loginService.authenticate(username, password);
-		
+
 		if (isAuthenticated) {
-			//create a new session (create parameter is true)
+			//Returns the current HttpSession associated with this request or,
+			// if there is no current session and create is true, returns a new session. 
+			// create a new session (create parameter is true)
 			session = request.getSession(true);
-			
+
 			User enteredUser = loginService.getUserDetails(username);
 			session.setAttribute("user", enteredUser);
+			session.setAttribute("username", enteredUser.getUsername());
 			session.setAttribute("IS_LOGGED_IN", true);
-			
-			RequestDispatcher dispatcher = request.getRequestDispatcher("welcome.jsp"); 
+
+			RequestDispatcher dispatcher = request.getRequestDispatcher("welcome.jsp");
 			dispatcher.forward(request, response);
 			return;
 		} else {
